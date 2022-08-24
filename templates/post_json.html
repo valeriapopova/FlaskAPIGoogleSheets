@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+    Вы можете добавить json cюда,а мы выгрузим всю информацию оттуда в google sheets
+
+{% endblock %}
+
+{% block content_title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-6">
+        <form action="{{ url_for('post_json_to_google_sheets') }}" method="POST">
+
+            {% for field in form  %}
+                <div class="form-group">
+                    {{ field.label(class='control-label') }}
+                    {{ field(class='form-control') }}
+                </div>
+            {% endfor %}
+
+
+            <button type="submit" class="btn btn-success">ОТПРАВИТЬ</button>
+
+        </form>
+    </div>
+{% endblock %}
