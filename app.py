@@ -16,6 +16,7 @@ def homepage():
 def post():
     return render_template('post.html')
 
+
 # @app.errorhandler(404)
 # def page_not_found(event):
 #     return render_template('404.html'), 404
@@ -29,12 +30,15 @@ def post_json_to_google_sheets():
             service = get_service(json_file)
             spreadsheet_id = get_spreadsheet(json_file)
             data = get_data(json_file)
+            d = get_data_value(json_file)
+
             values = service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range='Лист1!A1',
-                                                            valueInputOption="RAW",
+                                                            valueInputOption="USER_ENTERED",
                                                             body={'values': data}).execute()
+
+            values = service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range='Лист1!A1',
+                                                            valueInputOption="USER_ENTERED",
+                                                            body={"majorDimension": "COLUMNS", 'values': d}).execute()
             return redirect('/post')
     form = FileForm()
     return render_template('post_json.html', form=form)
-
-
-

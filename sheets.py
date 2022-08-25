@@ -27,8 +27,29 @@ def get_data(json_file):
         result = data['data']
         data_for_sheets = []
         for key in result:
-            data_for_sheets.append([key, result[key]])
+            # for k in key:
+            data_for_sheets.append([key])
         return data_for_sheets
+
+
+def get_data_value(json_file):
+    with open(json_file, 'r') as file:
+        data = json.load(file)
+        result = data['data']
+        data_for_sheets = []
+        for key in result:
+            # for k in key:
+            data_for_sheets.append(result[key])
+        return data_for_sheets
+
+k = get_data('creds.json')
+t = get_data_value('creds.json')
+
+print(k, t)
+
+
+
+
 
 
 
