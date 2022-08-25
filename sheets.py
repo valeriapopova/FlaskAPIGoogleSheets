@@ -21,15 +21,15 @@ def get_spreadsheet(json_file):
         return spreadsheet_id
 
 
-def get_data(json_file):
+def get_data_key(json_file):
     with open(json_file, 'r') as file:
         data = json.load(file)
         result = data['data']
         data_for_sheets = []
         for key in result:
-            # for k in key:
-            data_for_sheets.append([key])
-        return data_for_sheets
+            for k in key:
+                data_for_sheets.append(k)
+        return [data_for_sheets]
 
 
 def get_data_value(json_file):
@@ -37,15 +37,16 @@ def get_data_value(json_file):
         data = json.load(file)
         result = data['data']
         data_for_sheets = []
-        for key in result:
-            # for k in key:
-            data_for_sheets.append(result[key])
+        for res in result:
+            for k, v in res.items():
+                data_for_sheets.append(v)
         return data_for_sheets
 
-k = get_data('creds.json')
-t = get_data_value('creds.json')
 
-print(k, t)
+# k = get_data_key('creds.json')
+# t = get_data_value('creds.json')
+#
+# print(k)
 
 
 
