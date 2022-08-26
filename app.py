@@ -26,7 +26,7 @@ def page_not_found(event):
 def post_json_to_google_sheets():
     if request.method == 'POST':
         json_file = request.form['file']
-        if json_file:
+        if json_file.endswith('.json'):
             service = get_service(json_file)
             spreadsheet_id = get_spreadsheet(json_file)
             data_keys = get_data_key(json_file)
@@ -40,6 +40,9 @@ def post_json_to_google_sheets():
                                                             valueInputOption="RAW",
                                                             body={"majorDimension": "COLUMNS",
                                                                   'values': data_values}).execute()
-            return redirect('/post')
+            return redirect('/post', 301)
+        else:
+            return Response("Недопустимый формат файла, необходимое расширение - JSON", 404)
+
     form = FileForm()
     return render_template('post_json.html', form=form), 200
