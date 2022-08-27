@@ -21,9 +21,15 @@
                 </div>
             {% endfor %}
 
+            <div class ='form-group-title'>
+                Выберите вариат записи:
 
-            <button type="submit" class="btn btn-success">ОТПРАВИТЬ</button>
+            <input type="submit" class="btn btn-primary mb-2" name="submit_button" value="Перезаписать">
+            <input type="submit" class="btn btn-success" name="submit_button" value="Дописать данные(названия колонок и значения)">
+            <input type="submit" class="btn btn-dark" name="submit_button" value="Дописать только значения">
+            <input type="submit" class="btn btn-warning" name="submit_button" value="Записать в новый лист">
 
+            </div>
         </form>
     </div>
 {% endblock %}
