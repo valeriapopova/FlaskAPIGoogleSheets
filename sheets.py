@@ -43,28 +43,32 @@ def get_data_key(json_file):
         return Response("Данные для записи не найдены", 404)
 
 
-# def get_data_value(json_file):
-#     try:
-#         result = json_file['data']
-#         data_for_sheets = []
-#         for res in result:
-#             for k, v in res.items():
-#                 data_for_sheets.append([v])
-#         return data_for_sheets
-#     except KeyError:
-#         return Response("Данные для записи не найдены", 404)
-
 def get_data_value(json_file):
     try:
         result = json_file['data']
         data_for_sheets = []
         for res in result:
-            r = res.values()
-            values = list(r)
-            data_for_sheets.append(values)
+            for k, v in res.items():
+                if type(v) != list:
+                    data_for_sheets.append([v])
+                else:
+                    data_for_sheets.append(v)
         return data_for_sheets
     except KeyError:
         return Response("Данные для записи не найдены", 404)
+
+# def get_data_value(json_file):
+#     try:
+#         result = json_file['data']
+#         data_for_sheets = []
+#         for res in result:
+#             r = res.values()
+#             values = list(r)
+#             print(values)
+#             data_for_sheets.append(values)
+#         return data_for_sheets
+#     except KeyError:
+#         return Response("Данные для записи не найдены", 404)
 
 
 def append_values(service, spreadsheet_id, data_values):
@@ -74,7 +78,7 @@ def append_values(service, spreadsheet_id, data_values):
 
         values = service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range=f'{first_list}!A1',
                                                     valueInputOption="RAW",
-                                                    body={"majorDimension": "ROWS",
+                                                    body={"majorDimension": "COLUMNS",
                                                           'values': data_values}).execute()
     except HttpError as error:
         return Response(f"An error occurred: {error}")
@@ -91,7 +95,7 @@ def append(service, spreadsheet_id, data_keys, data_values):
 
         values = service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range=f'{first_list}!A1',
                                                         valueInputOption="RAW",
-                                                        body={"majorDimension": "ROWS",
+                                                        body={"majorDimension": "COLUMNS",
                                                               'values': data_values}).execute()
     except HttpError as error:
         return Response(f"An error occurred: {error}")
@@ -105,6 +109,7 @@ def clear_and_append(service, spreadsheet_id, data_keys, data_values):
         values = service.spreadsheets().values().clear(spreadsheetId=spreadsheet_id,
                                                        range=first_list).execute()
 
+
         values = service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range=f'{first_list}!A1',
                                                         valueInputOption="RAW",
                                                         body={'values': data_keys}).execute()
@@ -112,7 +117,7 @@ def clear_and_append(service, spreadsheet_id, data_keys, data_values):
 
         values = service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range=f'{first_list}!A1',
                                                         valueInputOption="RAW",
-                                                        body={"majorDimension": "ROWS",
+                                                        body={"majorDimension": "COLUMNS",
                                                               'values': data_values}).execute()
 
     except HttpError as error:
@@ -144,7 +149,7 @@ def append_new_list(service, spreadsheet_id, data_keys, data_values):
 
             values = service.spreadsheets().values().append(spreadsheetId=spreadsheet_id, range=f'{new_sheet_title}!A1',
                                                             valueInputOption="RAW",
-                                                            body={"majorDimension": "ROWS",
+                                                            body={"majorDimension": "COLUMNS",
                                                                   'values': data_values}).execute()
     except HttpError as error:
         return Response(f"An error occurred: {error}")
