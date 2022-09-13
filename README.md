@@ -2,6 +2,8 @@
 
 Это методы, которые записывают json в google sheets.
 
+***/sheets*** доступ к таблице google sheets
+
 Для того, что бы записать данные в свою таблицу, нужно получить реквизиты (`credentials`) для работы приложения с [Google API](https://console.cloud.google.com/).
 
 ***Порядок действий при регистрации таков:***
@@ -36,7 +38,8 @@ auth_dict = {
 } 
 ```
 ___POST___
-/sheets/append - записывает данные в конец первого листа таблицы
+
+_/sheets/append_ - записывает данные в конец первого листа таблицы
 
 *Parameters*
  json (данные которые нужно записать в таблицу + авторизационные данные)
@@ -60,8 +63,33 @@ Responses 200 успешно
 
 
 
-+___POST___             
-sheets/append_values   - записывает только значения в google sheets          
+___POST___  
+
+_/sheets/append_values_   - записывает только значения в google sheets          
+ 
+*Parameters*
+ json (данные которые нужно записать в таблицу + авторизационные данные)
+```
+{
+      "type": "service_account",
+      "project_id": "ozonsheets",
+      "private_key_id": "",
+      "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
+      "client_email": "account@ozonsheets.iam.gserviceaccount.com",
+      "client_id": "",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
+      "spreadsheetId": "",
+      "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}]
+} 
+``` 
+Responses 200 успешно
+
+___POST___    
+
+_/sheets/append_values_   - перезаписывает данные в таблицу google sheets          
  
 *Parameters*
  json (данные которые нужно записать в таблицу + авторизационные данные)
@@ -84,5 +112,26 @@ sheets/append_values   - записывает только значения в g
 Responses 200 успешно
 
 
+___POST___   
 
-
+_/sheets/append_list_   - записывает данные в новый лист google sheets         
+ 
+*Parameters*
+ json (данные которые нужно записать в таблицу + авторизационные данные)
+```
+{
+      "type": "service_account",
+      "project_id": "ozonsheets",
+      "private_key_id": "",
+      "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
+      "client_email": "account@ozonsheets.iam.gserviceaccount.com",
+      "client_id": "",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
+      "spreadsheetId": "",
+      "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}]
+} 
+``` 
+Responses 200 успешно
