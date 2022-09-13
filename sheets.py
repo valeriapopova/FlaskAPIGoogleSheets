@@ -10,6 +10,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 def get_service(json_file):
+    # аутентификация в сервисном аккаунте Google
     try:
         credentials = ServiceAccountCredentials.from_json_keyfile_dict(
             json_file,
