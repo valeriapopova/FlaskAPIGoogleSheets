@@ -146,4 +146,5 @@ def post(data, auth_data, host):
     return response
 ```
 где data(данные для записи в виде json) = {"data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}}
+
 auth_data(авторизационные данные(credentials) полученные по инструкции выше)
