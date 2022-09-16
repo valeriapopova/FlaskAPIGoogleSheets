@@ -8,12 +8,12 @@ app = Flask(__name__)
 app.config.from_object(Configuration)
 
 
-@app.route('/sheets')
+@app.route('/google_sheets')
 def homepage():
     return render_template('base.html'), 200
 
 
-@app.route('/sheets/append', methods=['POST'])
+@app.route('/google_sheets/append', methods=['POST'])
 def post_json_to_google_sheets():
 
     try:
@@ -28,7 +28,7 @@ def post_json_to_google_sheets():
         return Response("Пустое значение", 400)
     return render_template('post.html'), 200
 
-@app.route('/sheets/append_values', methods=['POST'])
+@app.route('/google_sheets/append_values', methods=['POST'])
 def post_json_to_google_sheets_2():
 
     try:
@@ -43,7 +43,7 @@ def post_json_to_google_sheets_2():
 
 
 
-@app.route('/sheets/clear_append', methods=['POST'])
+@app.route('/google_sheets/clear_append', methods=['POST'])
 def post_json_to_google_sheets_3():
 
     try:
@@ -59,7 +59,7 @@ def post_json_to_google_sheets_3():
 
 
 
-@app.route('/sheets/append_list', methods=['POST'])
+@app.route('/google_sheets/append_list', methods=['POST'])
 def post_json_to_google_sheets_4():
 
     try:

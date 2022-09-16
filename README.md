@@ -2,7 +2,7 @@
 
 Это методы, которые записывают json в google sheets.
 
-***/sheets*** доступ к таблице google sheets
+***/google_sheets*** доступ к таблице google sheets
 
 Для того, что бы записать данные в свою таблицу, нужно получить реквизиты (`credentials`) для работы приложения с [Google API](https://console.cloud.google.com/).
 
@@ -39,7 +39,7 @@ auth_dict = {
 ```
 ___POST___
 
-_/sheets/append_ - записывает данные в конец первого листа таблицы
+_/google_sheets/append_ - записывает данные в конец первого листа таблицы
 
 *Parameters*
  json (данные которые нужно записать в таблицу + авторизационные данные + данные для записи("data")
@@ -65,7 +65,7 @@ Responses 200 успешно
 
 ___POST___  
 
-_/sheets/append_values_   - записывает только значения в google sheets          
+_/google_sheets/append_values_   - записывает только значения в google sheets
  
 *Parameters*
  json (данные которые нужно записать в таблицу + авторизационные данные + данные для записи("data")
@@ -89,7 +89,7 @@ Responses 200 успешно
 
 ___POST___    
 
-_/sheets/append_values_   - перезаписывает данные в таблицу google sheets          
+_/google_sheets/append_values_   - перезаписывает данные в таблицу google sheets
  
 *Parameters*
  json (данные которые нужно записать в таблицу + авторизационные данные + данные для записи("data")
@@ -114,7 +114,7 @@ Responses 200 успешно
 
 ___POST___   
 
-_/sheets/append_list_   - записывает данные в новый лист google sheets         
+_/google_sheets/append_list_   - записывает данные в новый лист google sheets
  
 *Parameters*
  json (данные которые нужно записать в таблицу + авторизационные данные + данные для записи("data")
@@ -141,7 +141,7 @@ ___рекомендуемый пример запроса___
 ```
 def post(data, auth_data, host):
     data.update(auth_data)
-    url = f'http://{host}:5001/sheets/append'
+    url = f'http://{host}:5001/google_sheets/append'
     response = requests.post(url, json=data)
     return response
 ```
