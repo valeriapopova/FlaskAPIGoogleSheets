@@ -1,4 +1,5 @@
 from app import app
 
 if __name__ == '__main__':
-    app.run(host='api.ecomru.ru', port=5001)
+    app.run(port=5000)
+    # host = 'api.ecomru.ru',

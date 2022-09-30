@@ -44,6 +44,7 @@ def get_data_key(json_file):
         return Response("Данные для записи не найдены", 404)
 
 
+
 def get_data_value(json_file):
     try:
         result = json_file['data']
@@ -57,6 +58,7 @@ def get_data_value(json_file):
         return data_for_sheets
     except KeyError:
         return Response("Данные для записи не найдены", 404)
+
 
 # def get_data_value(json_file):
 #     try:
@@ -154,3 +156,6 @@ def append_new_list(service, spreadsheet_id, data_keys, data_values):
                                                                   'values': data_values}).execute()
     except HttpError as error:
         return Response(f"An error occurred: {error}")
+
+
+
