@@ -42,6 +42,23 @@ def post_json_to_google_sheets_2():
     return render_template('post.html'), 200
 
 
+@app.route('/google_sheets/update_row', methods=['POST'])
+def post_json_to_google_sheets_5():
+
+    try:
+        json_file = request.get_json(force=False)
+        print(json_file)
+        spreadsheet_id = get_spreadsheet(json_file)
+        table_name = json_file['table_name']
+        unique_column = json_file['unique_column']
+        unique_ = json_file['data']
+        for k in unique_:
+            unique_name = k[unique_column]
+        update_values(table_name, unique_column, json_file, spreadsheet_id, unique_name)
+    except BadRequestKeyError:
+        return Response("Пустое значение", 400)
+    return render_template('post.html'), 200
+
 
 @app.route('/google_sheets/clear_append', methods=['POST'])
 def post_json_to_google_sheets_3():

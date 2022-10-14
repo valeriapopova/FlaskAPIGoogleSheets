@@ -144,6 +144,34 @@ _/google_sheets/append_list_   - записывает данные в новый
 ``` 
 Responses 200 успешно
 
+___POST___
+
+_/google_sheets/update_row   - обновляет строку
+
+*Parameters*
+ json (данные которые нужно записать в таблицу + авторизационные данные + данные для записи("data" +
+ "table_name"(название таблицы в которой будет происходить обновление данных) +
+ "unique_column"(название столбца ,по которому будет происходить поиск обновляемого объекта ) )
+```
+{
+      "type": "service_account",
+      "project_id": "ozonsheets",
+      "private_key_id": "",
+      "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
+      "client_email": "account@ozonsheets.iam.gserviceaccount.com",
+      "client_id": "",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
+      "spreadsheetId": "",
+      "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}],
+      'table_name': 'Лист5',
+      'unique_column': 'id'
+}
+```
+Responses 200 успешно
+
 ___рекомендуемый пример запроса___
 
 ```

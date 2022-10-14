@@ -1,7 +1,10 @@
+import os
 import random
 import json
 from pprint import pprint
+import gspread
 
+from sheetfu import SpreadsheetApp, Table
 import apiclient
 import httplib2
 from flask import Response
@@ -44,7 +47,6 @@ def get_data_key(json_file):
         return Response("Данные для записи не найдены", 404)
 
 
-
 def get_data_value(json_file):
     try:
         result = json_file['data']
@@ -83,6 +85,33 @@ def append_values(service, spreadsheet_id, data_values):
                                                     valueInputOption="RAW",
                                                     body={"majorDimension": "COLUMNS",
                                                           'values': data_values}).execute()
+    except HttpError as error:
+        return Response(f"An error occurred: {error}")
+
+
+def update_values(table_name, unique_column, json_file, spreadsheet_id, unique_name):
+    try:
+        random_integer = random.randint(1, 2147483647)
+        random_int = random.randint(1, 2147483647)
+        filename = f'{random_integer}_{random_int}.json'
+        if not os.path.isdir("json_for_updating"):
+            os.makedirs("json_for_updating")
+
+        filepath = f'json_for_updating/'
+        new_file = filepath + filename
+        with open(new_file, 'w') as f:
+            json.dump(json_file, f)
+        sa = SpreadsheetApp(new_file)
+        spreadsheet = sa.open_by_id(spreadsheet_id=spreadsheet_id)
+        data_range = spreadsheet.get_sheet_by_name(table_name).get_data_range()
+
+        table = Table(data_range, backgrounds=True)
+
+        for item in table:
+            if item.get_field_value(unique_column) == unique_name:
+                for k, v in json_file['data'][0].items():
+                    item.set_field_value(k, v)
+        table.commit()
     except HttpError as error:
         return Response(f"An error occurred: {error}")
 
@@ -156,6 +185,4 @@ def append_new_list(service, spreadsheet_id, data_keys, data_values):
                                                                   'values': data_values}).execute()
     except HttpError as error:
         return Response(f"An error occurred: {error}")
-
-
 
