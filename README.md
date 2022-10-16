@@ -165,7 +165,7 @@ _/google_sheets/update_row   - обновляет строку
       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
       "spreadsheetId": "",
-      "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}],
+      "data" : [{"id": "12", "type": "new_lead", "first_name": 'valery', "phone_number": "1111111111111"}]},
       'table_name': 'Лист5',
       'unique_column': 'id'
 }
