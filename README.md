@@ -20,7 +20,7 @@
 
 В процессе регистрации получаем файл `credentials.json` содержащий ключи для подключения приложения и секретики для `OAuth` авторизации пользователя. Этот файл не имеет доступа к данным аккаунта, таким как таблицы или диск. По сути это разрешение от Google для приложения на работу с Google API.
 
--  Cоздать или получить id необходимой таблицы для записи и добавить в json(находится в url)
+-  Cоздать или получить id необходимой таблицы для записи и добавить в json(находится в url между d/ и /edit )
 
 *пример:*
 
@@ -54,18 +54,14 @@ _/google_sheets/append_ - записывает данные в конец пер
 ```
 {
       "type": "service_account",
-      "project_id": "ozonsheets",
       "private_key_id": "",
       "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
       "client_email": "account@ozonsheets.iam.gserviceaccount.com",
       "client_id": "",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
+      "spreadsheetId": "",
       "spreadsheetId": "",
       "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}]
-} 
+}
 ``` 
 Responses 200 успешно
 
@@ -80,15 +76,11 @@ _/google_sheets/append_values_   - записывает только значе�
 ```
 {
       "type": "service_account",
-      "project_id": "ozonsheets",
       "private_key_id": "",
       "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
       "client_email": "account@ozonsheets.iam.gserviceaccount.com",
       "client_id": "",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
+      "spreadsheetId": "",
       "spreadsheetId": "",
       "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}]
 } 
@@ -104,15 +96,11 @@ _/google_sheets/append_values_   - перезаписывает данные в 
 ```
 {
       "type": "service_account",
-      "project_id": "ozonsheets",
       "private_key_id": "",
       "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
       "client_email": "account@ozonsheets.iam.gserviceaccount.com",
       "client_id": "",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
+      "spreadsheetId": "",
       "spreadsheetId": "",
       "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}]
 } 
@@ -129,15 +117,11 @@ _/google_sheets/append_list_   - записывает данные в новый
 ```
 {
       "type": "service_account",
-      "project_id": "ozonsheets",
       "private_key_id": "",
       "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
       "client_email": "account@ozonsheets.iam.gserviceaccount.com",
       "client_id": "",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
+      "spreadsheetId": "",
       "spreadsheetId": "",
       "data" : [{"col1": [1, 2, 3]}, {"col2": ["q", "w", "e"]}, {"col3": 1}]
 } 
@@ -155,19 +139,14 @@ _/google_sheets/update_row   - обновляет строку
 ```
 {
       "type": "service_account",
-      "project_id": "ozonsheets",
       "private_key_id": "",
       "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
       "client_email": "account@ozonsheets.iam.gserviceaccount.com",
       "client_id": "",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://oauth2.googleapis.com/token",
-      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/account%40ozonsheets.iam.gserviceaccount.com",
       "spreadsheetId": "",
-      "data" : [{"id": "12", "type": "new_lead", "first_name": 'valery', "phone_number": "1111111111111"}]},
-      'table_name': 'Лист5',
-      'unique_column': 'id'
+      "data": [{"order_id": 3, "type": "new", "len": 99}],
+      "table_name": "2102052614",
+      "unique_column": "order_id"
 }
 ```
 Responses 200 успешно
@@ -187,4 +166,4 @@ def post(data, auth_data, host):
 ***авторизационые данные***:
 
 - auth_data(авторизационные данные(credentials) полученные по инструкции выше)
-- id таблицы полученное по инструкции выше)
+- id таблицы полученное по инструкции выше

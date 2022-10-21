@@ -1,8 +1,7 @@
 import os
 import random
 import json
-from pprint import pprint
-import gspread
+import pandas as pd
 
 from sheetfu import SpreadsheetApp, Table
 import apiclient
@@ -89,19 +88,24 @@ def append_values(service, spreadsheet_id, data_values):
         return Response(f"An error occurred: {error}")
 
 
+def get_spreadsheet_app(json_file):
+    random_int = random.randint(1, 2147483647)
+    filename = f'{random_int}.json'
+    if not os.path.isdir("json_for_updating"):
+        os.makedirs("json_for_updating")
+
+    filepath = f'json_for_updating/'
+    new_file = filepath + filename
+    with open(new_file, 'w') as f:
+        json.dump(json_file, f)
+    sa = SpreadsheetApp(new_file)
+    os.remove(new_file)
+    return sa
+
+
 def update_values(table_name, unique_column, json_file, spreadsheet_id, unique_name):
     try:
-        random_integer = random.randint(1, 2147483647)
-        random_int = random.randint(1, 2147483647)
-        filename = f'{random_integer}_{random_int}.json'
-        if not os.path.isdir("json_for_updating"):
-            os.makedirs("json_for_updating")
-
-        filepath = f'json_for_updating/'
-        new_file = filepath + filename
-        with open(new_file, 'w') as f:
-            json.dump(json_file, f)
-        sa = SpreadsheetApp(new_file)
+        sa = get_spreadsheet_app(json_file)
         spreadsheet = sa.open_by_id(spreadsheet_id=spreadsheet_id)
         data_range = spreadsheet.get_sheet_by_name(table_name).get_data_range()
 
@@ -111,9 +115,99 @@ def update_values(table_name, unique_column, json_file, spreadsheet_id, unique_n
             if item.get_field_value(unique_column) == unique_name:
                 for k, v in json_file['data'][0].items():
                     item.set_field_value(k, v)
+            else:
+                item = None
+
+        if item == None:
+            table.add_one(json_file['data'][0])
         table.commit()
     except HttpError as error:
         return Response(f"An error occurred: {error}")
+
+
+def update_values_list(table_name, unique_column, json_file, spreadsheet_id):
+    try:
+        sa = get_spreadsheet_app(json_file)
+        spreadsheet = sa.open_by_id(spreadsheet_id=spreadsheet_id)
+        data_range = spreadsheet.get_sheet_by_name(table_name).get_data_range()
+
+        table = Table(data_range, backgrounds=True)
+
+        for item in table:
+            for i in range(len(json_file['data'])):
+                if item.get_field_value(unique_column) == json_file['data'][i][unique_column]:
+                    for k, v in json_file['data'][i].items():
+                        item.set_field_value(k, v)
+        table.commit()
+    except HttpError as error:
+        return Response(f"An error occurred: {error}")
+
+
+def delete_row(json_file, spreadsheet_id, table_name, unique_column, unique_name):
+    sa = get_spreadsheet_app(json_file)
+    spreadsheet = sa.open_by_id(spreadsheet_id=spreadsheet_id)
+    data_range = spreadsheet.get_sheet_by_name(table_name).get_data_range()
+
+    table = Table(data_range)
+    to_delete = table.select([{unique_column: unique_name}])
+    table.delete_items(to_delete)
+
+    table.commit()
+
+
+def search_row(json_file, spreadsheet_id, table_name, unique_name):
+    service = get_service(json_file)
+    sa = get_spreadsheet_app(json_file)
+    spreadsheet = sa.open_by_id(spreadsheet_id=spreadsheet_id)
+    data_range = spreadsheet.get_sheet_by_name(table_name).get_data_range()
+
+    d = data_range.get_values()
+    for i in range(len(d)):
+        for j in range(len(d[i])):
+            if d[i][j] == unique_name:
+                row = i+1
+                col = j+1
+
+                # print(row)
+                # print(col)
+                #
+                # max_col = spreadsheet.get_sheet_by_name(table_name).get_max_columns()
+                # print(max_col)
+
+                r = f'{table_name}!{row}:{row}'
+                result = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=r,
+                                                             majorDimension='ROWS').execute()
+
+                return result['values']
+
+
+def search_rows(json_file, spreadsheet_id, table_name, unique_column):
+    service = get_service(json_file)
+    sa = get_spreadsheet_app(json_file)
+    spreadsheet = sa.open_by_id(spreadsheet_id=spreadsheet_id)
+    data_range = spreadsheet.get_sheet_by_name(table_name).get_data_range()
+    res = []
+    d = data_range.get_values()
+
+    for c in range(len(d)):
+        for j in range(len(d[c])):
+            if d[c][j] == unique_column:
+                col = j
+            else:
+                col = 0
+
+    for i in range(len(d)):
+        for ii in range(len(json_file['data'])):
+            if d[i][col] == json_file['data'][ii][unique_column]:
+                row = i+1
+
+                r = f'{table_name}!{row}:{row}'
+                result = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=r,
+                                                             majorDimension='ROWS').execute()
+                if result['values'] not in res:
+                    res.append(result['values'])
+
+    return res
 
 
 def append(service, spreadsheet_id, data_keys, data_values):
@@ -186,3 +280,24 @@ def append_new_list(service, spreadsheet_id, data_keys, data_values):
     except HttpError as error:
         return Response(f"An error occurred: {error}")
 
+
+def get_all_rows(service, spreadsheet_id, sheet_title=None):
+    try:
+        current_sheet = service.spreadsheets().get(spreadsheetId=spreadsheet_id).execute()
+        if sheet_title is None:
+            sheet_title = current_sheet['sheets'][0]['properties']['title']
+
+        result = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=f'{sheet_title}').execute()
+        values = result.get('values', [])
+
+        if not values:
+            return 'No data found.'
+
+        r = []
+        for row in values:
+            print(row)
+            r.append(row)
+        return r
+
+    except HttpError as error:
+        return Response(f"An error occurred: {error}")
